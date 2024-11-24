@@ -11,6 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 include __DIR__ . '/db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
+
+if (!isset($data['username']) || !isset($data['email']) || !isset($data['password'])) {
+    echo json_encode(["success" => false, "message" => "Invalid input. Username, email, and password are required."]);
+    exit();
+}
+
 $username = $data['username'];
 $email = $data['email'];
 $password = password_hash($data['password'], PASSWORD_BCRYPT);
@@ -32,3 +38,4 @@ try {
     echo json_encode(["success" => false, "message" => $e->getMessage()]);
 }
 ?>
+

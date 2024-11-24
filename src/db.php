@@ -1,10 +1,9 @@
 <?php
-$config = include __DIR__ . '/../config/config.php';
 
-$host = $config['db_host'];
-$dbname = $config['db_name'];
-$username = $config['db_user'];
-$password = $config['db_pass'];
+$host = "localhost";
+$dbname = "food_saver";
+$username = "root";
+$password = "";
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -13,4 +12,5 @@ try {
     echo json_encode(["success" => false, "message" => "Connection failed: " . $e->getMessage()]);
     exit();
 }
+
 

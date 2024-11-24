@@ -11,17 +11,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 include __DIR__ . '/db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
+
+if (!isset($data['username']) || !isset($data['password'])) {
+    echo json_encode(["success" => false, "message" => "Invalid input. Username and password are required."]);
+    exit();
+}
+
 $username = $data['username'];
 $password = $data['password'];
 
 try {
-    // Fetch user from database
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
     $stmt->execute(['username' => $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-        // Generate a token or session (here using JWT as an example)
         $response = [
             "success" => true,
             "message" => "Login successful",
@@ -35,3 +39,4 @@ try {
     echo json_encode(["success" => false, "message" => $e->getMessage()]);
 }
 ?>
+
